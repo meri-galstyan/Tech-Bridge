@@ -202,3 +202,23 @@ h1 {
 .container.active .toggle-right {
   transform: translateX(200%);
 }
+
+#back {
+  position: fixed;
+  top: 20px;      /* distance from top */
+  left: 20px;     /* distance from left */
+  padding: 8px 16px;
+  font-size: 16px;
+  background-color: #7C4DFF;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(124, 77, 255, 0.4);
+  z-index: 1000;   /* above everything */
+  transition: background-color 0.3s ease;
+}
+
+#back:hover {
+  background-color: #5E35B1;
+}

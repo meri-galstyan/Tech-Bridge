@@ -10,11 +10,21 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
 </head>
 <body>
+  <button id="back">⬅️Go Back</button>
+  <script>
+    // Back button functionality
+    const backBtn = document.getElementById("back");
+    if (backBtn) {
+      backBtn.addEventListener("click", () => {
+        window.history.back();
+      });
+    }
+  </script>  
   <div class="container" id="container">
     <div class="sign-up">
       <form id="signup-form">
         <h1>Create Account</h1>
-        <p class="subtitle">Start helping seniors today 💜</p>
+        <p class="subtitle">Start helping seniors today</p>
         <div class="input-wrapper">
           <i class="fa fa-user"></i>
           <input type="text" id="signup-name" placeholder="Name" name="name" required />
@@ -34,7 +44,7 @@
     <div class="log-in">
       <form id="login-form">
         <h1>Log In</h1>
-        <p class="subtitle">Welcome back, Volunteer 👋</p>
+        <p class="subtitle">Welcome back, Volunteer</p>
         <div class="input-wrapper">
           <i class="fa fa-envelope"></i>
           <input type="email" placeholder="Email" name="email" required />
@@ -51,12 +61,12 @@
       <div class="toggle">
         <div class="toggle-panel toggle-left">
           <h1>Already have an account?</h1>
-          <p>Welcome back! Let’s get volunteering 💪</p>
+          <p>Welcome back! Let’s get volunteering</p>
           <button class="hidden" id="login">Log In</button>
         </div>
         <div class="toggle-panel toggle-right">
           <h1>New here?</h1>
-          <p>Create your account and start making an impact ✨</p>
+          <p>Create your account and start making an impact</p>
           <button class="hidden" id="register">Sign Up</button>
         </div>
       </div>
