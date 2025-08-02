@@ -1,5 +1,5 @@
 function goToHelp() {
-  alert("Help page coming soon!");
+  window.location.href = "help.html";
 }
 
 function goToVolunteer() {

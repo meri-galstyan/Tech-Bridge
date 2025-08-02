@@ -63,9 +63,8 @@ if (loginForm) {
       const data = await res.json();
 
       if (res.ok) {
-        alert("🎉 Logged in successfully!");
         loginForm.reset();
-        // Optional: redirect to dashboard or home
+        window.location.href = "volunteer.html";
       } else {
         alert(`❌ Login failed: ${data.message}`);
       }

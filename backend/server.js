@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
+const HelpRequest = require('./models/HelpRequest');
 
 // Load environment variables from root-level .env
 require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
@@ -16,6 +17,8 @@ const PORT = 5050;
 
 app.use(cors());
 app.use(express.json());
+
+app.use(express.static(path.join(__dirname, '../frontend')));
 
 // Connect to MongoDB
 console.log("Loaded MONGO_URI:", process.env.MONGO_URI);
@@ -71,6 +74,35 @@ app.post('/login', async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+
+
+// Help request submission route
+app.post('/help-request', async (req, res) => {
+  try {
+    const newRequest = new HelpRequest(req.body);
+    await newRequest.save();
+    console.log("✅ Help request saved:", newRequest);
+    res.status(200).json({ message: "Help request submitted!" });
+  } catch (err) {
+    console.error("❌ Failed to save help request:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+
+// Fetch all help requests (for volunteers)
+app.get('/help-requests', async (req, res) => {
+  try {
+    const requests = await HelpRequest.find().sort({ createdAt: -1 });
+    res.status(200).json(requests);
+  } catch (err) {
+    console.error("❌ Failed to fetch help requests:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+
+
 
 
 

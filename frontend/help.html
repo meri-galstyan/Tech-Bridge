@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Request Help – TechBridge</title>
+  <link rel="stylesheet" href="help.css" />
+</head>
+<body>
+  <h1>Request Help</h1>
+
+  <button id="back">⬅️Go Back</button>
+  <script>
+    // Back button functionality
+    const backBtn = document.getElementById("back");
+    if (backBtn) {
+      backBtn.addEventListener("click", () => {
+        window.history.back();
+      });
+    }
+  </script>  
+  <form id="help-form">
+    
+    <!-- Full Name -->
+    <label>Full Name:</label><br/>
+    <input type="text" id="name" name="name" required /><br/><br/>
+
+    <!-- Phone -->
+    <label>Phone Number <small>(You’ll be contacted by phone)</small>:</label><br/>
+    <input type="tel" id="phone" name="phone" required /><br/><br/>
+
+    <!-- Email -->
+    <label>Email (optional):</label><br/>
+    <input type="email" id="email" name="email" /><br/><br/>
+
+    <!-- Preferred Contact Method -->
+    <label>Preferred Contact Method:</label><br/>
+    <input type="radio" name="contactMethod" value="Phone" checked /> Phone
+    <input type="radio" name="contactMethod" value="Email" /> Email
+    <input type="radio" name="contactMethod" value="Either" /> Either<br/><br/>
+
+    <!-- Type of Help Needed -->
+    <label>Type of Help Needed:</label><br/>
+    <input type="checkbox" name="helpType" value="Tech Support" /> Tech Support<br/>
+    <input type="checkbox" name="helpType" value="Grocery or Prescription Delivery" /> Grocery or Prescription Delivery<br/>
+    <input type="checkbox" name="helpType" value="Companionship" /> Companionship (Phone call check-ins)<br/>
+    <input type="checkbox" name="helpType" value="Transportation" /> Transportation<br/>
+    <input type="checkbox" name="helpType" value="Other" /> Other
+    <br/>
+    <textarea id="other-text" placeholder="(Optional) Describe other help you need..."></textarea><br/><br/>
+
+    <!-- Description -->
+    <label>Tell us briefly what you need help with:</label><br/>
+    <textarea id="description" name="description" required></textarea><br/><br/>
+
+    <!-- Urgency -->
+    <label>Urgency:</label><br/>
+    <select id="urgency" required>
+      <option value="">--Select one--</option>
+      <option value="Not urgent">Not urgent</option>
+      <option value="Sometime this week">Sometime this week</option>
+      <option value="Within 2 days">Within 2 days</option>
+      <option value="Urgent: today">Urgent – today</option>
+    </select><br/><br/>
+
+    <!-- Location -->
+    <label>City:</label><br/>
+    <input type="text" id="city" name="city" required /><br/><br/>
+    
+    <label>ZIP Code:</label><br/>
+    <input type="text" id="zip" name="zip" required /><br/><br/>
+
+    <!-- Submit -->
+    <button type="submit" style="font-size: 18px; padding: 10px 20px;">Request Help</button>
+  </form>
+
+  <script>
+    const form = document.getElementById("help-form");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      // Collect help types
+      const helpTypeNodes = document.querySelectorAll("input[name='helpType']:checked");
+      const helpTypes = Array.from(helpTypeNodes).map(cb => cb.value);
+      const otherText = document.getElementById("other-text").value.trim();
+      if (otherText) helpTypes.push("Other: " + otherText);
+
+      const payload = {
+        name: document.getElementById("name").value.trim(),
+        phone: document.getElementById("phone").value.trim(),
+        email: document.getElementById("email").value.trim(),
+        contactMethod: document.querySelector("input[name='contactMethod']:checked").value,
+        helpTypes,
+        description: document.getElementById("description").value.trim(),
+        urgency: document.getElementById("urgency").value,
+        city: document.getElementById("city").value.trim(),
+        zip: document.getElementById("zip").value.trim()
+      };
+
+      try {
+        const res = await fetch("http://localhost:5050/help-request", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+        if (res.ok) {
+          alert("✅ Request submitted successfully!");
+          form.reset();
+        } else {
+          alert(`❌ Failed: ${data.message}`);
+        }
+      } catch (err) {
+        console.error(err);
+        alert("❌ Server error. Please try again later.");
+      }
+    });
+  </script>
+</body>
+</html>
