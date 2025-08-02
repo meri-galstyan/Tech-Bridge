@@ -1,0 +1,19 @@
+# Ignore environment variable files
+.env
+.env.local
+.env.*.local
+
+# Ignore node dependencies
+node_modules/
+
+# Ignore logs
+logs/
+*.log
+npm-debug.log*
+
+# Ignore OS system files
+.DS_Store
+
+# Ignore build output
+dist/
+build/
