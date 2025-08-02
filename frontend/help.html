@@ -26,28 +26,23 @@
     <input type="text" id="name" name="name" required /><br/><br/>
 
     <!-- Phone -->
-    <label>Phone Number <small>(You’ll be contacted by phone)</small>:</label><br/>
+    <label>Phone Number:</label><br/>
     <input type="tel" id="phone" name="phone" required /><br/><br/>
 
     <!-- Email -->
     <label>Email (optional):</label><br/>
     <input type="email" id="email" name="email" /><br/><br/>
 
-    <!-- Preferred Contact Method -->
-    <label>Preferred Contact Method:</label><br/>
+   <!-- Preferred Contact Method -->
+   <label>Preferred Contact Method:</label>
+   <div class="radio-group">
     <input type="radio" name="contactMethod" value="Phone" checked /> Phone
     <input type="radio" name="contactMethod" value="Email" /> Email
-    <input type="radio" name="contactMethod" value="Either" /> Either<br/><br/>
+    <input type="radio" name="contactMethod" value="Either" /> Either
+   </div>
 
-    <!-- Type of Help Needed -->
-    <label>Type of Help Needed:</label><br/>
-    <input type="checkbox" name="helpType" value="Tech Support" /> Tech Support<br/>
-    <input type="checkbox" name="helpType" value="Grocery or Prescription Delivery" /> Grocery or Prescription Delivery<br/>
-    <input type="checkbox" name="helpType" value="Companionship" /> Companionship (Phone call check-ins)<br/>
-    <input type="checkbox" name="helpType" value="Transportation" /> Transportation<br/>
-    <input type="checkbox" name="helpType" value="Other" /> Other
-    <br/>
-    <textarea id="other-text" placeholder="(Optional) Describe other help you need..."></textarea><br/><br/>
+
+
 
     <!-- Description -->
     <label>Tell us briefly what you need help with:</label><br/>
@@ -80,18 +75,12 @@
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      // Collect help types
-      const helpTypeNodes = document.querySelectorAll("input[name='helpType']:checked");
-      const helpTypes = Array.from(helpTypeNodes).map(cb => cb.value);
-      const otherText = document.getElementById("other-text").value.trim();
-      if (otherText) helpTypes.push("Other: " + otherText);
 
       const payload = {
         name: document.getElementById("name").value.trim(),
         phone: document.getElementById("phone").value.trim(),
         email: document.getElementById("email").value.trim(),
         contactMethod: document.querySelector("input[name='contactMethod']:checked").value,
-        helpTypes,
         description: document.getElementById("description").value.trim(),
         urgency: document.getElementById("urgency").value,
         city: document.getElementById("city").value.trim(),
