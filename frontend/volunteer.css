@@ -1,0 +1,126 @@
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background: linear-gradient(135deg, #e7f0fd, #fdebf0);
+    color: #333;
+    padding: 40px;
+    line-height: 1.6;
+  }
+  
+  /* Header styling */
+  header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  
+  header h1 {
+    font-size: 2.8rem;
+    color: black;
+    margin-bottom: 10px;
+  }
+  
+  header p {
+    font-size: 1.1rem;
+    color: #4a5568;
+  }
+  
+  #back {
+    position: fixed;
+    top: 20px;      /* distance from top */
+    left: 20px;     /* distance from left */
+    padding: 8px 16px;
+    font-size: 16px;
+    background-color: #7C4DFF;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(124, 77, 255, 0.4);
+    z-index: 1000;   /* above everything */
+    transition: background-color 0.3s ease;
+  }
+  
+  #back:hover {
+    background-color: #5E35B1;
+  }
+  
+  main {
+    display: flex;
+    flex-direction: column; /* stack h2 and request-list vertically */
+    align-items: flex-start; /* keep everything hugging the left side */
+  }
+  
+  
+  /* This section stays the same */
+  main h2 {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    color: black;
+  }
+  
+
+  #request-list {
+    width: 45%;  /* or 48%, whatever you like around half */
+  }
+  
+  
+  
+  
+  
+  
+  /* Request cards */
+  .request-card {
+    background: white;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-left: 6px solid #7C4DFF;
+    border-radius: 10px;
+    box-shadow:#5E35B1;
+  }
+  
+  .request-card h3 {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+    color:darkblue;
+  }
+  
+  .request-card p {
+    margin-bottom: 6px;
+  }
+  
+  /* Accept/Decline buttons */
+  .request-card button {
+    margin-top: 10px;
+    margin-right: 10px;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .request-card button:first-of-type {
+    background-color: #48bb78;
+    color: white;
+  }
+  
+  .request-card button:first-of-type:hover {
+    background-color: #38a169;
+  }
+  
+  .request-card button:last-of-type {
+    background-color: #e53e3e;
+    color: white;
+  }
+  
+  .request-card button:last-of-type:hover {
+    background-color: #c53030;
+  }
+  
