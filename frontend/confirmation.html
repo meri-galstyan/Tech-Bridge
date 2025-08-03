@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Request Submitted – TechBridge</title>
+  <link rel="stylesheet" href="help.css" />
+  <link rel="stylesheet" href="confirmation.css" />
+  <link rel="icon" href="../images/logo_nobackground.png" type="image/png" />
+</head>
+<body>
+  <div class="confirmation-box">
+    <h2>✅ Thank you! Your request has been submitted.</h2>
+    <p id="summary"></p>
+    <button onclick="window.print()">🖨️ Print a Copy</button>
+    <button onclick="goHome()">🏠 Back to Home</button>
+  </div>
+
+  <script>
+    const data = JSON.parse(localStorage.getItem("lastHelpRequest"));
+
+    if (data) {
+      const summary = document.getElementById("summary");
+      summary.innerHTML = `
+        <strong>Name:</strong> ${data.name}<br/>
+        <strong>Phone:</strong> ${data.phone}<br/>
+        <strong>Preferred Contact:</strong> ${data.contactMethod}<br/>
+        <strong>Help Needed:</strong> ${data.description}<br/>
+        <strong>Urgency:</strong> ${data.urgency}<br/>
+        <strong>Location:</strong> ${data.city}, ${data.zip}<br/>
+        <strong>Status:</strong> Awaiting volunteer<br/>
+      `;
+    }
+
+    function goHome() {
+      localStorage.removeItem("lastHelpRequest");
+      window.location.href = "index.html";
+    }
+  </script>
+</body>
+</html>

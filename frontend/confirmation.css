@@ -1,0 +1,47 @@
+body {
+  background: linear-gradient(to right, #f5eafb, #ebdcfb);
+}
+
+.confirmation-box {
+  max-width: 600px;
+  margin: 50px auto;
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 0 12px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.confirmation-box h2 {
+  color: #004080;
+  margin-bottom: 20px;
+}
+
+.confirmation-box p {
+  font-size: 18px;
+  margin-bottom: 15px;
+  text-align: left;
+  line-height: 1.6;
+}
+
+.confirmation-box button {
+  margin: 10px 8px;
+  background-color: #004080;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.confirmation-box button:hover {
+  background-color: #003366;
+}
+
+/* Hide buttons when printing */
+@media print {
+  button {
+    display: none;
+  }
+}
