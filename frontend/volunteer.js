@@ -1,8 +1,7 @@
-// volunteer.js
-
 window.onload = async function () {
   const listContainer = document.getElementById('request-list');
   const acceptedContainer = document.getElementById('accepted-requests');
+  const statsBar = document.getElementById('stats-bar');
   const volunteerId = localStorage.getItem('volunteerId');
 
   if (!volunteerId) {
@@ -12,8 +11,15 @@ window.onload = async function () {
   }
 
   listContainer.innerHTML = '<p>Loading help requests...</p>';
+  statsBar.textContent = 'Loading your hours...';
 
   try {
+    // Fetch volunteer's current hours
+    const hoursRes = await fetch(`http://localhost:5050/volunteer/${volunteerId}/hours`);
+    const hoursData = await hoursRes.json();
+    statsBar.textContent = `🏅 You’ve earned ${hoursData.hours || 0} community service hour${hoursData.hours === 1 ? '' : 's'}`;
+
+    // Fetch all help requests
     const res = await fetch('http://localhost:5050/help-requests');
     const data = await res.json();
     listContainer.innerHTML = '';
@@ -53,7 +59,8 @@ window.onload = async function () {
     }
 
   } catch (err) {
-    console.error("Error fetching help requests:", err);
+    console.error("Error loading data:", err);
+    statsBar.textContent = '❌ Error loading your hours';
     listContainer.innerHTML = '<p>Error loading help requests.</p>';
   }
 };
@@ -75,12 +82,10 @@ async function respondToRequest(requestId, decision) {
     const data = await res.json();
 
     if (res.ok) {
-      // Remove request from both incoming and accepted columns
       document.getElementById(`request-${requestId}`)?.remove();
       document.getElementById(`accepted-${requestId}`)?.remove();
 
       if (decision === 'accept') {
-        // Fetch the full request info from the server
         const res2 = await fetch(`http://localhost:5050/help-requests`);
         const allRequests = await res2.json();
         const acceptedReq = allRequests.find(r => r._id === requestId);
@@ -101,7 +106,6 @@ function renderAcceptedRequest(req) {
   const acceptedContainer = document.getElementById('accepted-requests');
   if (!acceptedContainer) return;
 
-  // clear "No accepted requests yet" message
   if (acceptedContainer.textContent.includes("No accepted requests")) {
     acceptedContainer.innerHTML = '';
   }
@@ -140,6 +144,12 @@ async function completeRequest(requestId) {
     if (res.ok) {
       document.getElementById(`accepted-${requestId}`)?.remove();
       alert("✅ Marked as completed. Hours awarded!");
+
+      // refresh the hours
+      const res2 = await fetch(`http://localhost:5050/volunteer/${volunteerId}/hours`);
+      const hoursData = await res2.json();
+      document.getElementById('stats-bar').textContent =
+        `🏅 You’ve earned ${hoursData.hours || 0} community service hour${hoursData.hours === 1 ? '' : 's'}`;
     } else {
       alert(`❌ Failed: ${data.message}`);
     }
