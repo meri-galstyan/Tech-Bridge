@@ -64,7 +64,7 @@ app.post('/help-request', async (req, res) => {
   }
 });
 
-// GET REQUESTS
+// GET ALL REQUESTS
 app.get('/help-requests', async (req, res) => {
   try {
     const requests = await HelpRequest.find().sort({ createdAt: -1 });
@@ -75,10 +75,10 @@ app.get('/help-requests', async (req, res) => {
   }
 });
 
-// ACCEPT / DECLINE
+// ACCEPT / DECLINE REQUEST
 app.post('/request/:id/decision', async (req, res) => {
   const { id } = req.params;
-  const { decision } = req.body;
+  const { decision, volunteerId } = req.body;
 
   try {
     const request = await HelpRequest.findById(id);
@@ -86,6 +86,7 @@ app.post('/request/:id/decision', async (req, res) => {
 
     if (decision === 'accept') {
       request.status = 'Accepted';
+      request.volunteerId = volunteerId; // ✅ Track which volunteer accepted
     } else if (decision === 'decline') {
       request.status = 'Declined';
     } else {
@@ -100,4 +101,52 @@ app.post('/request/:id/decision', async (req, res) => {
   }
 });
 
+// ✅ GET MY ACCEPTED REQUESTS
+app.get('/my-requests/:volunteerId', async (req, res) => {
+  const { volunteerId } = req.params;
+  try {
+    const accepted = await HelpRequest.find({
+      volunteerId,
+      status: 'Accepted',
+    }).sort({ createdAt: -1 });
+    res.status(200).json(accepted);
+  } catch (err) {
+    console.error("❌ Failed to fetch accepted requests:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+
+
+// ✅ Mark request as completed and award hours
+app.post('/request/:id/complete', async (req, res) => {
+  const { id } = req.params;
+  const { volunteerId } = req.body;
+
+  try {
+    const request = await HelpRequest.findById(id);
+    if (!request) return res.status(404).json({ message: "Request not found" });
+
+    // prevent double-completing
+    if (request.status === "Completed") {
+      return res.status(400).json({ message: "Request already completed" });
+    }
+
+    const volunteer = await Volunteer.findById(volunteerId);
+    if (!volunteer) return res.status(404).json({ message: "Volunteer not found" });
+
+    // update request
+    request.status = "Completed";
+    await request.save();
+
+    // update volunteer hours (assume 1 hour per request)
+    volunteer.communityServiceHours += 1;
+    await volunteer.save();
+
+    res.status(200).json({ message: "Marked as completed and hours awarded!" });
+  } catch (err) {
+    console.error("❌ Error completing request:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+});

@@ -5,6 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Volunteer Dashboard | TechBridge</title>
   <link rel="stylesheet" href="volunteer.css" />
+  <style>
+    main {
+      display: flex;
+      flex-direction: row;
+      gap: 2rem;
+      padding: 1rem;
+    }
+
+    section {
+      flex: 1;
+    }
+
+    #accepted-requests {
+      border-left: 2px solid #ccc;
+      padding-left: 1rem;
+    }
+  </style>
 </head>
 <body>
   <header>
@@ -13,22 +30,31 @@
   </header>
 
   <button id="back">⬅️ Go Back</button>
-  <script>
-    // Back button functionality
-    const backBtn = document.getElementById("back");
-    if (backBtn) {
-      backBtn.addEventListener("click", () => {
-        window.history.back();
-      });
-    }
-  </script>  
 
   <main>
-    <h2>Incoming Help Requests</h2>
-    <div id="request-list">
-      <p>Loading help requests...</p>
-    </div>
+    <!-- Incoming Help Requests -->
+    <section>
+      <h2>Incoming Help Requests</h2>
+      <div id="request-list">
+        <p>Loading help requests...</p>
+      </div>
+    </section>
+
+    <!-- Accepted Requests -->
+    <section>
+      <h2>Accepted Requests</h2>
+      <div id="accepted-requests">
+        <p>No accepted requests yet.</p>
+      </div>
+    </section>
   </main>
+
+  <script>
+    // ⬅️ Back button functionality
+    document.getElementById("back").addEventListener("click", () => {
+      window.history.back();
+    });
+  </script>
 
   <script src="volunteer.js"></script>
 </body>

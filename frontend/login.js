@@ -63,6 +63,9 @@ if (loginForm) {
       const data = await res.json();
 
       if (res.ok) {
+        // 🔒 Save volunteer ID for future requests (like accept/decline)
+        localStorage.setItem("volunteerId", data.volunteerId);
+
         loginForm.reset();
         window.location.href = "volunteer.html";
       } else {
