@@ -34,7 +34,7 @@ window.onload = async function () {
         return;
       }
 
-      if (req.status === 'Declined' || req.status === 'Accepted') return;
+      if (req.status === 'Declined' || req.status === 'Accepted' || req.status === 'Completed') return;
 
       const item = document.createElement('div');
       item.classList.add('request-card');
