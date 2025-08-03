@@ -12,14 +12,13 @@
 
   <button id="back">⬅️Go Back</button>
   <script>
-    // Back button functionality
     const backBtn = document.getElementById("back");
     if (backBtn) {
       backBtn.addEventListener("click", () => {
         window.history.back();
       });
     }
-  </script>  
+  </script>
 
   <form id="help-form">
     <label>Full Name:</label><br/>
@@ -54,26 +53,58 @@
     <input type="text" id="city" name="city" required /><br/><br/>
 
     <label>ZIP Code:</label><br/>
-    <input type="text" id="zip" name="zip" required /><br/><br/>
+    <input
+      type="text"
+      id="zip"
+      name="zip"
+      required
+      pattern="\d{5}"
+      inputmode="numeric"
+      maxlength="5"
+    /><br/><br/>
 
     <button type="submit" style="font-size: 18px; padding: 10px 20px;">Request Help</button>
   </form>
 
   <script>
     const form = document.getElementById("help-form");
+    const emailInput = document.getElementById("email");
+    const zipInput = document.getElementById("zip");
+    const contactRadios = document.querySelectorAll("input[name='contactMethod']");
+
+    // Reset custom validity dynamically when contact method changes or email is typed
+    const validateEmailField = () => {
+      const contactMethod = document.querySelector("input[name='contactMethod']:checked").value;
+      const email = emailInput.value.trim();
+
+      if ((contactMethod === "Email" || contactMethod === "Either") && email === "") {
+        emailInput.setCustomValidity("Please enter your email address or change the contact method.");
+      } else {
+        emailInput.setCustomValidity("");
+      }
+    };
+
+    contactRadios.forEach(radio =>
+      radio.addEventListener("change", validateEmailField)
+    );
+    emailInput.addEventListener("input", validateEmailField);
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
 
+      validateEmailField(); // ensure we’re caught up before validation
+      const isValid = form.reportValidity();
+      if (!isValid) return;
+
       const payload = {
         name: document.getElementById("name").value.trim(),
         phone: document.getElementById("phone").value.trim(),
-        email: document.getElementById("email").value.trim(),
+        email: emailInput.value.trim(),
         contactMethod: document.querySelector("input[name='contactMethod']:checked").value,
         description: document.getElementById("description").value.trim(),
         urgency: document.getElementById("urgency").value,
         city: document.getElementById("city").value.trim(),
-        zip: document.getElementById("zip").value.trim()
+        zip: zipInput.value.trim()
       };
 
       try {
@@ -85,15 +116,14 @@
 
         const data = await res.json();
         if (res.ok) {
-          // Save to localStorage for confirmation page
           localStorage.setItem("lastHelpRequest", JSON.stringify(payload));
           window.location.href = "confirmation.html";
         } else {
-          alert(`❌ Failed: ${data.message}`);
+          alert(`Failed: ${data.message}`);
         }
       } catch (err) {
         console.error(err);
-        alert("❌ Server error. Please try again later.");
+        alert("Server error. Please try again later.");
       }
     });
   </script>

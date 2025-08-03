@@ -31,7 +31,7 @@ app.post('/signup', async (req, res) => {
     await newUser.save();
     res.status(200).json({ message: "User created!" });
   } catch (err) {
-    console.error("❌ Signup failed:", err);
+    console.error("Signup failed:", err);
     res.status(500).json({ message: "Server error" });
   }
 });
@@ -47,7 +47,7 @@ app.post('/login', async (req, res) => {
 
     res.status(200).json({ message: "Login successful", volunteerId: user._id });
   } catch (err) {
-    console.error("❌ Login error:", err);
+    console.error("Login error:", err);
     res.status(500).json({ message: "Server error" });
   }
 });
@@ -59,7 +59,7 @@ app.post('/help-request', async (req, res) => {
     await newRequest.save();
     res.status(200).json({ message: "Help request submitted!" });
   } catch (err) {
-    console.error("❌ Failed to save help request:", err);
+    console.error("Failed to save help request:", err);
     res.status(500).json({ message: "Server error" });
   }
 });
@@ -70,7 +70,7 @@ app.get('/help-requests', async (req, res) => {
     const requests = await HelpRequest.find().sort({ createdAt: -1 });
     res.status(200).json(requests);
   } catch (err) {
-    console.error("❌ Failed to fetch help requests:", err);
+    console.error("Failed to fetch help requests:", err);
     res.status(500).json({ message: "Server error" });
   }
 });
@@ -86,7 +86,7 @@ app.post('/request/:id/decision', async (req, res) => {
 
     if (decision === 'accept') {
       request.status = 'Accepted';
-      request.volunteerId = volunteerId; // ✅ Track which volunteer accepted
+      request.volunteerId = volunteerId;
     } else if (decision === 'decline') {
       request.status = 'Declined';
     } else {
@@ -101,7 +101,7 @@ app.post('/request/:id/decision', async (req, res) => {
   }
 });
 
-// ✅ GET MY ACCEPTED REQUESTS
+// GET MY ACCEPTED REQUESTS
 app.get('/my-requests/:volunteerId', async (req, res) => {
   const { volunteerId } = req.params;
   try {
@@ -111,7 +111,7 @@ app.get('/my-requests/:volunteerId', async (req, res) => {
     }).sort({ createdAt: -1 });
     res.status(200).json(accepted);
   } catch (err) {
-    console.error("❌ Failed to fetch accepted requests:", err);
+    console.error("Failed to fetch accepted requests:", err);
     res.status(500).json({ message: "Server error" });
   }
 });
@@ -119,7 +119,7 @@ app.get('/my-requests/:volunteerId', async (req, res) => {
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
 
 
-// ✅ Mark request as completed and award hours
+// Mark request as completed and award hours
 app.post('/request/:id/complete', async (req, res) => {
   const { id } = req.params;
   const { volunteerId } = req.body;
@@ -146,12 +146,12 @@ app.post('/request/:id/complete', async (req, res) => {
 
     res.status(200).json({ message: "Marked as completed and hours awarded!" });
   } catch (err) {
-    console.error("❌ Error completing request:", err);
+    console.error("Error completing request:", err);
     res.status(500).json({ message: "Server error" });
   }
 });
 
-// ✅ GET volunteer's total community service hours
+// GET volunteer's total community service hours
 app.get('/volunteer/:id/hours', async (req, res) => {
   const { id } = req.params;
   try {
@@ -159,7 +159,7 @@ app.get('/volunteer/:id/hours', async (req, res) => {
     if (!volunteer) return res.status(404).json({ message: "Volunteer not found" });
     res.status(200).json({ hours: volunteer.communityServiceHours });
   } catch (err) {
-    console.error("❌ Error fetching volunteer hours:", err);
+    console.error("Error fetching volunteer hours:", err);
     res.status(500).json({ message: "Server error" });
   }
 });
